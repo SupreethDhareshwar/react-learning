@@ -44,31 +44,31 @@ Initial Screen:
 </p>
 
 
-## Setting up Bootstrap
+## Setting up Material UI
 
-Bootstrap is the most popular open source framework for developing responsive, mobile-first websites. You don’t have to use React Bootstrap together with React but it is a popular library for integrating Bootstrap with React apps. 
+Material UI is one of the most popular open source framework for developing responsive, mobile-first websites. You don’t have to use Material UI together with React but it is a popular library with inbuilt components for integrating with React apps. 
 
 ```sh
-npm install --save react-bootstrap bootstrap@3
+npm install --save @material-ui/icons @material-ui/core typeface-roboto
 ```
 
-Import Bootstrap CSS in the beginning of your src/index.js file:
+Import Roboto Font in the beginning of your src/index.js file:
 
 ```sh
-import 'bootstrap/dist/css/bootstrap.css';
+import 'typeface-roboto';
 // Put any other imports below so that CSS from your
 // components takes precedence over default styles.
 ```
 
-Import required React Bootstrap components within src/App.js file or your custom component files:
+Import required React Material components within src/App.js file or your custom component files:
 
 ```sh
-import { Navbar, Jumbotron, Button } from 'react-bootstrap';
+import AppBar from '@material-ui/core/AppBar';
 ```
 
-Now you are ready to use the imported React Bootstrap components within your component hierarchy defined in the render method. Here is the <a href="https://react-bootstrap.github.io/getting-started/introduction/">link</a> to read more on the react bootstrap components.
+Now you are ready to use the imported React Material components within your component hierarchy defined in the render method. Here is the <a href="https://material-ui.com/getting-started/installation/">link</a> to read more on the react material components.
 
-Let us build a simple Header component with react bootstrap and render it.
+Let us build a simple Header component with react material components and render it.
 
 * Add components folder inside src and create a new file Header.js
 
@@ -76,34 +76,90 @@ Let us build a simple Header component with react bootstrap and render it.
 // src/components/Header.js
 
 import React, { Component } from 'react';
-import {Navbar,Nav,NavItem} from 'react-bootstrap';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import MenuIcon from '@material-ui/icons/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import { withStyles } from '@material-ui/core/styles';
+const styles = {
+  root: {
+    flexGrow: 1,
+  },
+  flex: {
+    flex: 1,
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+};
 
-export default class Header extends Component {
-    render(){
+export default withStyles(styles)( class Header extends Component {
+  state = {
+    auth: true,
+    anchorEl: null,
+  };
+
+
+  handleMenu = event => {
+    //Open Left
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+  render(){
+    const { classes } = this.props;
+    const { anchorEl } = this.state;
+    const open = Boolean(anchorEl);
+
         return (
-            <Navbar inverse collapseOnSelect>
-  <Navbar.Header>
-    <Navbar.Brand>
-      <a href="#brand">React-Learning</a>
-    </Navbar.Brand>
-    <Navbar.Toggle />
-  </Navbar.Header>
-  <Navbar.Collapse>
-    <Nav pullRight>
-      <NavItem eventKey={1}>
-        Home
-      </NavItem>
-      <NavItem eventKey={2} >
-        About Us
-      </NavItem>
-      <NavItem eventKey={2} >
-        Logout
-      </NavItem>
-    </Nav>
-  </Navbar.Collapse>
-</Navbar>
+          <AppBar position="static">
+          <Toolbar>
+            <IconButton color="inherit" aria-label="Menu">
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="title" color="inherit" className={classes.flex}>
+              React Learning
+            </Typography>
+           
+              <div>
+                <IconButton
+                  aria-owns={open ? 'menu-appbar' : null}
+                  aria-haspopup="true"
+                  onClick={this.handleMenu}
+                  color="inherit">
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={this.handleClose}
+                >
+                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                </Menu>
+              </div>
+          </Toolbar>
+        </AppBar>
           );
     }
+
+})
 
 }
 ```
