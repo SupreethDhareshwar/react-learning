@@ -197,3 +197,131 @@ The app should start and the page should now look like this:
 
 ## Setting up routes
  
+ Let us create a main component where we will define different routes to different pages.
+
+ * First update App.js to render newly created Main Component in src/components
+```sh
+// src/App.js 
+
+import React, { Component } from 'react';
+import './App.css';
+import Header from './components/Header.js';
+import Main from './components/Main.js'
+export default class App extends Component {
+  render() {
+    return (
+    <div>
+      <Header/>
+      <Main/>
+    </div>);
+
+  }
+
+}
+```
+
+* Let us install react-router-dom package. This will be used to define different routes.
+```sh
+npm install react-router-dom --save
+```
+You can read more about react router <a href="https://reacttraining.com/react-router/web/example/basic">here</a>
+
+* Let us define Main.js with different routes
+```sh
+//src/compoennts/Main.js
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Home from './Home.js';
+export default class Main extends Component{
+    render(){
+        return(
+            <Router>
+            <div>
+              <Route exact path="/" component={Home} />
+              <Route path="/about" component={About} />
+            </div>
+          </Router>
+        );
+    }
+}
+const About = () => (
+    <div>
+      <h2>About</h2>
+    </div>
+  );
+```
+Let us also define Home component
+
+```sh
+//src/components/Home.js
+import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import HomeLogo from '../home-page.jpg';
+const styles = {
+    card: {
+        width: '50%',
+        marginLeft:'25%',
+        marginTop:'5%'
+    },
+    media: {
+      height: '275px'
+    }
+  };
+
+export default withStyles(styles) (class Home extends Component{
+    render(){
+        const classes = this.props.classes;
+        return(
+            <div>
+            <Card className={classes.card}>
+              <CardMedia
+                className={classes.media}
+                image={HomeLogo}
+                title="Home"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="headline" component="h2">
+                  Home Page
+                </Typography>
+                <Typography component="p">
+                A home page is generally the main page a visitor navigating to a website from a web search engine will see, and it may also serve as a landing page to attract visitors.
+                The home page is used to facilitate navigation to other pages on the site by providing links to prioritized and recent articles and pages, and possibly a search box.
+                For example, a news website may present headlines and first paragraphs of top stories, with links to full articles, in a dynamic web page that reflects the popularity and recentness of stories. Meanwhile, other websites use the homepage to attract users to create an account. Once they are logged in, the homepage may be redirected to their profile page. 
+                This may in turn be referred to as the "personal home page".   </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small" color="primary">
+                  Share
+                </Button>
+                <Button size="small" color="primary">
+                  Learn More
+                </Button>
+              </CardActions>
+            </Card>
+          </div>
+        );
+    }
+})
+```
+Make sure to add home-page.jpg image in src folder and also update Index.cs
+```sh
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  background-color: #dddddd;
+}
+```
+* The page will load home page card at http://localhost:3000/ and just about message when routing to http://localhost:3000/about
+
+<p align='center'>
+<img src='Documentation/Screen3.png' width='600' alt='Screen 3'>
+</p>
+
+## Inter Components Data Flow
